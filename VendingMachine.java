@@ -7,10 +7,6 @@ public class VendingMachine {
     private StateOfVendingMachine state;
     private List<Snack> snacks;
     private Snack selectedSnack;
-//    private SnackDispenseHandler snackDispenser;
-//    private Map<String, Snack> snacks;
-//    private double amountInserted;
-//    private String selectedSnack;
 
     public VendingMachine() {
         this.state = new IdleState();
