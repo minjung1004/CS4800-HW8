@@ -23,6 +23,10 @@ public class VendingMachine {
         this.state = state;
     }
 
+    public StateOfVendingMachine getState(){
+        return state;
+    }
+
     public void setSelectedSnack(Snack selectedSnack){
         this.selectedSnack = selectedSnack;
     }
