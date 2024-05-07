@@ -1,69 +1,57 @@
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class VendingMachine {
-    private StateOfVendingMachine currentState;
-    private SnackDispenseHandler snackDispenser;
-    private Map<String, Snack> snacks;
-    private double amountInserted;
-    private String selectedSnack;
+    private StateOfVendingMachine state;
+    private List<Snack> snacks;
+    private Snack selectedSnack;
+//    private SnackDispenseHandler snackDispenser;
+//    private Map<String, Snack> snacks;
+//    private double amountInserted;
+//    private String selectedSnack;
 
     public VendingMachine() {
-        currentState = new IdleState(this);
-        snackDispenser = new SnackDispenseHandler();
-        snacks = new HashMap<>();
+        this.state = new IdleState();
+        this.snacks = Arrays.asList(
+              new Snack("Coke", 1.50, 5),
+              new Snack("Pepsi",1.75, 10),
+                new Snack("Cheetos", 2.50, 6),
+                new Snack("Doritos", 2.25, 8),
+                new Snack("KitKat", 1.00, 7),
+                new Snack("Snickers", 1.25, 0)
+        );
     }
 
-    public void setState(StateOfVendingMachine state) {
-        currentState = state;
-    }
-    public StateOfVendingMachine getState() {
-        return currentState;
+    public void changeState (StateOfVendingMachine state){
+        this.state = state;
     }
 
-    public SnackDispenseHandler getSnackDispenser() {
-        return snackDispenser;
+    public void setSelectedSnack(Snack selectedSnack){
+        this.selectedSnack = selectedSnack;
     }
 
-    public void addSnack(Snack snack)  {
-        snacks.put(snack.getName(), snack);
+    public Snack getSelectedSnack(){
+        return selectedSnack;
     }
 
-    public Snack getSnack(String name){
-        return snacks.get(name);
+    public void selectSnack(String snackName){
+        for(Snack snack : snacks) {
+            if(snack.getName().equals(snackName)){
+                state.selectSnack(this, snack);
+                return;
+            }
+        }
+        System.out.println("Snack not available");
     }
-
-    public void selectSnack(String snackName) {
-        currentState.selectSnack(snackName);
-    }
-
-
 
     public void insertMoney(double amount) {
-        currentState.insertMoney(amount);
+        state.insertMoney(this, amount);
     }
 
-    public void dispenseSnack() {
-        currentState.dispenseSnack();
+    public void dispenseSnack(){
+        state.dispenseSnack(this);
     }
-
-    public void setAmountInserted(double amountInserted) {
-        this.amountInserted = amountInserted;
-    }
-    public double getAmountInserted() {
-        return amountInserted;
-    }
-
-    public void returnChange() {
-        Snack snack = snacks.get(selectedSnack);
-        if (snack != null) {
-            double change = amountInserted - snack.getPrice();
-            System.out.println("Returning change: $" + change);
-        }
-        amountInserted = 0.0;
-    }
-
-
-
 
 }

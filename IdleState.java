@@ -1,29 +1,18 @@
 public class IdleState implements StateOfVendingMachine{
-
-    private VendingMachine vendingMachine;
-
-    public IdleState(VendingMachine vendingMachine){
-        this.vendingMachine = vendingMachine;
+    @Override
+    public void selectSnack(VendingMachine vendingMachine, Snack snack) {
+        vendingMachine.setSelectedSnack(snack);
+        System.out.println("Selected " + snack.getName() + " | Cost: $" + snack.getPrice());
+        vendingMachine.changeState(new WaitingForMoneyState());
     }
 
     @Override
-    public void selectSnack(String snackName) {
-        Snack snack = vendingMachine.getSnack(snackName);
-        if(snack != null) {
-            System.out.println("Snack selected: " + snack.getName());
-            vendingMachine.setState(new WaitingForMoneyState(vendingMachine));
-        } else {
-            System.out.println("Snack not avaiable.");
-        }
+    public void insertMoney(VendingMachine vendingMachine, double amount) {
+        System.out.println("Select a snack first. Then insert money.");
     }
 
     @Override
-    public void insertMoney(double amount) {
-        System.out.println("Selecta a snack first.");
-    }
-
-    @Override
-    public void dispenseSnack() {
-        System.out.println("Selecta a snack first.");
+    public void dispenseSnack(VendingMachine vendingMachine) {
+        System.out.println("Cannot dispense snack. Select another snack.");
     }
 }

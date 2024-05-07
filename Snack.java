@@ -18,8 +18,7 @@ public class Snack {
     public int getQuantity() {
         return quantity;
     }
-
-    public void decreaseQuantity(int amount) {
-        quantity -= amount;
+    public void decreaseQuantity() {
+        quantity --;
     }
 }

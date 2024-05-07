@@ -1,23 +1,30 @@
 public class WaitingForMoneyState implements StateOfVendingMachine{
-    private VendingMachine vendingMachine;
-    public WaitingForMoneyState(VendingMachine vendingMachine) {
-        this.vendingMachine = vendingMachine;
-    }
     @Override
-    public void selectSnack(String snackName) {
-        System.out.println("Insert money first");
+    public void selectSnack(VendingMachine vendingMachine, Snack snack) {
+        System.out.println("You have already selected a snack.");
     }
 
     @Override
-    public void insertMoney(double amount) {
-        System.out.println("Money inserted: $" + amount);
-        vendingMachine.setAmountInserted(amount);
-        vendingMachine.returnChange();
-        vendingMachine.setState(new DispensingSnackState(vendingMachine));
+    public void insertMoney(VendingMachine vendingMachine, double amount) {
+        Snack snack = vendingMachine.getSelectedSnack();
+        System.out.println("Paid:$" + amount);
+        double price = vendingMachine.getSelectedSnack().getPrice();
+        if (amount >= price && snack.getQuantity() > 0) {
+            vendingMachine.changeState(new DispensingSnackState());
+            double change = amount - price;
+            System.out.println("Returning Change: $" + change);
+        } else if (snack.getQuantity() <= 0) {
+           vendingMachine.changeState(new DispensingSnackState());
+
+        } else {
+            System.out.println("Not enough money. Returning money. Start Again.");
+            vendingMachine.changeState(new IdleState());
+        }
     }
 
     @Override
-    public void dispenseSnack() {
-        System.out.println("Insert money first");
+    public void dispenseSnack(VendingMachine vendingMachine) {
+        System.out.println("Insert more money first.");
     }
+
 }
